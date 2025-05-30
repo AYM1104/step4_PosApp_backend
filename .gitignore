@@ -172,3 +172,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# SSL証明書を含むフォルダ
+backend/certs/
