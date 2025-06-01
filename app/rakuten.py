@@ -8,7 +8,7 @@ load_dotenv()
 # 検索に必要な情報を取得
 RAKUTEN_APP_ID = os.getenv("RAKUTEN_APP_ID")
 RAKUTEN_API_URL = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
-JAN_CODE = "4969929260338"
+JAN_CODE = "4901777431508"
 
 # URLに追加するパラメーター
 params = {

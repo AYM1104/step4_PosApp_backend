@@ -6,7 +6,7 @@ load_dotenv()
 
 API_URL = "https://api.jancodelookup.com/"
 APP_ID = os.getenv("JAN_API_KEY")
-KEYWORD = "4969929260338"  # ← ここを商品名などに変更
+KEYWORD = "4901777431508"  # ← ここを商品名などに変更
 
 params = {
     "appId": APP_ID,
