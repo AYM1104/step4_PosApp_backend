@@ -7,7 +7,9 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js devサーバー
+    allow_origins=["http://localhost:3000",
+                   "https://app-step4-25.azurewebsites.net"
+    ],  # Next.js devサーバー
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
