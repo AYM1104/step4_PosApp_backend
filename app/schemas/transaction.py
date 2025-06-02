@@ -31,6 +31,9 @@ class TransactionItemResponse(BaseModel):
 class TransactionResponse(BaseModel):
     id: int
     created_at: datetime
+    total_excluding_tax: int 
+    total_tax: int
+    total_amount: int
     items: List[TransactionItemResponse]
 
     class Config:
