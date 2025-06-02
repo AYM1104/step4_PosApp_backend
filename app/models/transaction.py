@@ -7,7 +7,9 @@ class Transaction(Base):
     __tablename__ = "transactions"
 
     id = Column(Integer, primary_key=True, index=True)
-    total_amount = Column(Integer, nullable=False)
+    total_excluding_tax = Column(Integer, nullable=False)
+    total_tax = Column(Integer, nullable=False)
+    total_amount = Column(Integer, nullable=False) 
     total_items = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=datetime.now)
 

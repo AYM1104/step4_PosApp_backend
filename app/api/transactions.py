@@ -9,15 +9,24 @@ from datetime import datetime
 
 router = APIRouter()
 
+TAX_RATE = 0.1  # 消費税率（10%）
+
 # transactions テーブルに1件の「取引」を作成し、transaction_items テーブルにその取引に紐づく「商品明細」を複数登録する
 @router.post("/transactions", response_model=TransactionResponse)
 def create_transaction(transaction_data: TransactionCreate, db: Session = Depends(get_db)):
-    # 合計金額と商品点数を計算
-    total_amount = sum(item.price * item.quantity for item in transaction_data.items)
+    # 税抜金額の合計
+    total_excluding_tax = sum(item.price * item.quantity for item in transaction_data.items)
+    # 税額
+    total_tax = int(total_excluding_tax * TAX_RATE)
+    # 税込金額
+    total_amount = total_excluding_tax + total_tax
+    # 商品点数（合計数量）
     total_items = sum(item.quantity for item in transaction_data.items)
 
     # トランザクション（親）を作成
     transaction = Transaction(
+        total_excluding_tax=total_excluding_tax,
+        total_tax=total_tax,
         total_amount=total_amount,
         total_items=total_items,
         created_at=datetime.now()
