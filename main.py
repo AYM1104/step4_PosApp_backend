@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from app.api import product
-from app.api import transactions
+from app.api import product, transactions, line_webhook
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.line_uid_qrcode import router as line_uid_qrcode_router
 
 app = FastAPI()
 
@@ -18,7 +18,8 @@ app.add_middleware(
 # ルーターを登録
 app.include_router(product.router)
 app.include_router(transactions.router)
-
+app.include_router(line_webhook.router)
+app.include_router(line_uid_qrcode_router)
 
 
 

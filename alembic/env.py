@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 # 🔽 モデル読み込み（Base.metadata を利用）
 from app.models.base import Base
-from app.models import product, transaction, transaction_item
+from app.models import product, transaction, transaction_item, line_user
 
 # 🔽 .env を読み込んで環境変数を取得
 load_dotenv()
