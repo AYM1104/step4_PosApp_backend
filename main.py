@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.api import product
 from app.api import transactions
+from app.line import api_line_webhook
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -18,6 +19,8 @@ app.add_middleware(
 # ルーターを登録
 app.include_router(product.router)
 app.include_router(transactions.router)
+app.include_router(api_line_webhook.router)
+
 
 
 
