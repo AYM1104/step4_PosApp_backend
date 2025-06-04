@@ -6,10 +6,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# 🔍 環境変数の確認ログ（デプロイ時のみ出力される）
-LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
-print("[DEBUG] LINE_CHANNEL_SECRET:", LINE_CHANNEL_SECRET)
+# 🔍 環境変数の確認ログ（デプロイ時のみ出力される）ーーーーーー
+import os
 
+try:
+    print("[DEBUG] LINE_CHANNEL_SECRET:", os.getenv("LINE_CHANNEL_SECRET"))
+except Exception as e:
+    print("[ERROR] SECRET読み込みで例外:", e)
+
+# ーーーーーーーーーーーーーーーーーーーーーーーーーーーー  
 
 app.add_middleware(
     CORSMiddleware,
