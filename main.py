@@ -3,6 +3,7 @@ from app.api import product
 from app.api import transactions
 from app.line import api_line_webhook
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI()
 
@@ -20,24 +21,18 @@ app.add_middleware(
 def root():
     return {"message": "Azure MySQL Connected!"}
 
-# 🔍 環境変数の確認ログ（デプロイ時のみ出力される）ーーーーーー
-import os
-
-try:
-    print("[DEBUG] LINE_CHANNEL_SECRET:", os.getenv("LINE_CHANNEL_SECRET"))
-except Exception as e:
-    print("[ERROR] SECRET読み込みで例外:", e)
-
-# ーーーーーーーーーーーーーーーーーーーーーーーーーーーー  
-
-
-
 # ルーターを登録
 app.include_router(product.router)
 app.include_router(transactions.router)
 app.include_router(api_line_webhook.router)
 
 
-
+@app.on_event("startup")
+def log_line_env():
+    secret = os.getenv("LINE_CHANNEL_SECRET")
+    if secret:
+        print("✅ LINE_CHANNEL_SECRET:", secret)
+    else:
+        print("❌ LINE_CHANNEL_SECRET が未設定です")
 
 
