@@ -6,6 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# 🔍 環境変数の確認ログ（デプロイ時のみ出力される）
+LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
+print("[DEBUG] LINE_CHANNEL_SECRET:", LINE_CHANNEL_SECRET)
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000",
