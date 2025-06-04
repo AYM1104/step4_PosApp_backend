@@ -3,7 +3,6 @@ from app.api import product
 from app.api import transactions
 from app.line import api_line_webhook
 from fastapi.middleware.cors import CORSMiddleware
-import os
 
 app = FastAPI()
 
@@ -17,11 +16,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import logging
+import os
+
+logger = logging.getLogger("uvicorn")
+
 @app.get("/")
 def root():
     secret = os.getenv("LINE_CHANNEL_SECRET")
-    print("✅ LINE_CHANNEL_SECRET (GET /):", secret if secret else "❌ 未設定")
+    if secret:
+        logger.info("✅ LINE_CHANNEL_SECRET (GET /): 設定されています（長さ: %d）", len(secret))
+    else:
+        logger.warning("❌ LINE_CHANNEL_SECRET (GET /): 未設定です")
     return {"message": "Azure MySQL Connected!"}
+
+
+
 
 # ルーターを登録
 app.include_router(product.router)
