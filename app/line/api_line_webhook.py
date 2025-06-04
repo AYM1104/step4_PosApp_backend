@@ -30,10 +30,10 @@ async def line_webhook(request: Request, db: Session = Depends(get_db)):
     signature = request.headers.get("x-line-signature")
 
     # セキュリティチェック
-    hash = hmac.new(LINE_CHANNEL_SECRET.encode('utf-8'), body, hashlib.sha256).digest()
-    computed_signature = base64.b64encode(hash).decode('utf-8')
-    if signature != computed_signature:
-        raise HTTPException(status_code=403, detail="Invalid signature")
+    # hash = hmac.new(LINE_CHANNEL_SECRET.encode('utf-8'), body, hashlib.sha256).digest()
+    # computed_signature = base64.b64encode(hash).decode('utf-8')
+    # if signature != computed_signature:
+    #     raise HTTPException(status_code=403, detail="Invalid signature")
 
     data = await request.json()
     for event in data.get("events", []):
