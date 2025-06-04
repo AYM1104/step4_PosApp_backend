@@ -21,14 +21,15 @@ import os
 
 logger = logging.getLogger("uvicorn")
 
-@app.get("/")
-def root():
-    secret = os.getenv("LINE_CHANNEL_SECRET")
-    if secret:
-        logger.info("✅ LINE_CHANNEL_SECRET (GET /): 設定されています（長さ: %d）", len(secret))
+@app.get("/debug/access-token")
+def check_access_token():
+    token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
+    if token:
+        logger.info("✅ LINE_CHANNEL_ACCESS_TOKEN: 設定されています（長さ: %d）", len(token))
+        return {"status": "ok", "length": len(token)}
     else:
-        logger.warning("❌ LINE_CHANNEL_SECRET (GET /): 未設定です")
-    return {"message": "Azure MySQL Connected!"}
+        logger.warning("❌ LINE_CHANNEL_ACCESS_TOKEN: 未設定です")
+        return {"status": "missing"}
 
 
 
