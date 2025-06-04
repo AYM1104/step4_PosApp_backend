@@ -11,7 +11,7 @@ import base64
 
 router = APIRouter()
 
-LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")  # 必須：.env や GitHub Secretsで定義
+# LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")  # 必須：.env や GitHub Secretsで定義
 
 def register_line_user(user_id: str, db: Session):
     """LINEユーザーをDBに登録（重複は無視）"""
@@ -46,33 +46,33 @@ async def line_webhook(request: Request, db: Session = Depends(get_db)):
 
 
 # ーーーーー仮で実装
-import requests
+# import requests
 
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
+# LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 
-@router.post("/line/send-receipt")
-def send_receipt_to_user(user_id: str, db: Session = Depends(get_db)):
-    # 仮の買い物履歴
-    message = {
-        "type": "text",
-        "text": "🧾 ご購入ありがとうございます！\n\n- ペン × 2本\n- ノート × 1冊\n\n合計: ¥880（税込）"
-    }
+# @router.post("/line/send-receipt")
+# def send_receipt_to_user(user_id: str, db: Session = Depends(get_db)):
+#     # 仮の買い物履歴
+#     message = {
+#         "type": "text",
+#         "text": "🧾 ご購入ありがとうございます！\n\n- ペン × 2本\n- ノート × 1冊\n\n合計: ¥880（税込）"
+#     }
 
-    # LINEに送信
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
-    }
+#     # LINEに送信
+#     # headers = {
+#     #     "Content-Type": "application/json",
+#     #     "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
+#     # }
 
-    body = {
-        "to": user_id,
-        "messages": [message]
-    }
+#     body = {
+#         "to": user_id,
+#         "messages": [message]
+#     }
 
-    res = requests.post("https://api.line.me/v2/bot/message/push", json=body, headers=headers)
+#     res = requests.post("https://api.line.me/v2/bot/message/push", json=body, headers=headers)
 
-    if res.status_code != 200:
-        print("❌ LINE送信失敗:", res.text)
-        raise HTTPException(status_code=500, detail="LINE送信に失敗しました")
+#     if res.status_code != 200:
+#         print("❌ LINE送信失敗:", res.text)
+#         raise HTTPException(status_code=500, detail="LINE送信に失敗しました")
 
-    return {"status": "sent"}
+#     return {"status": "sent"}
