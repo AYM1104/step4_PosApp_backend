@@ -6,6 +6,20 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000",
+                   "https://app-step4-25.azurewebsites.net"
+    ],  # Next.js devサーバー
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def root():
+    return {"message": "Azure MySQL Connected!"}
+
 # 🔍 環境変数の確認ログ（デプロイ時のみ出力される）ーーーーーー
 import os
 
@@ -16,15 +30,7 @@ except Exception as e:
 
 # ーーーーーーーーーーーーーーーーーーーーーーーーーーーー  
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000",
-                   "https://app-step4-25.azurewebsites.net"
-    ],  # Next.js devサーバー
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
 
 # ルーターを登録
 app.include_router(product.router)
