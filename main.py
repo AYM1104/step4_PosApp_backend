@@ -19,6 +19,8 @@ app.add_middleware(
 
 @app.get("/")
 def root():
+    secret = os.getenv("LINE_CHANNEL_SECRET")
+    print("✅ LINE_CHANNEL_SECRET (GET /):", secret if secret else "❌ 未設定")
     return {"message": "Azure MySQL Connected!"}
 
 # ルーターを登録
@@ -27,12 +29,5 @@ app.include_router(transactions.router)
 app.include_router(api_line_webhook.router)
 
 
-@app.on_event("startup")
-def log_line_env():
-    secret = os.getenv("LINE_CHANNEL_SECRET")
-    if secret:
-        print("✅ LINE_CHANNEL_SECRET:", secret)
-    else:
-        print("❌ LINE_CHANNEL_SECRET が未設定です")
 
 
