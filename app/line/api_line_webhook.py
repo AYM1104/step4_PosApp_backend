@@ -22,6 +22,7 @@ def register_line_user(user_id: str, db: Session):
     db.add(new_user)
     db.commit()
 
+# LINEの友達追加イベントを受け取り、ユーザー登録する
 @router.post("/line/webhook")
 async def line_webhook(request: Request, db: Session = Depends(get_db)):
     body = await request.body()
