@@ -8,7 +8,7 @@ LINE UID（line_uid）を一意に記録し、関連するトークントラッ�
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from models.base import Base  # 既存の Base クラスを継承
+from app.models.base import Base  # 既存の Base クラスを継承
 
 class LineUser(Base):
     """
