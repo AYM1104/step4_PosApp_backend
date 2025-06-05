@@ -8,7 +8,7 @@ QRコード等に埋め込んでユーザー識別・連携に使用される。
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from models.base import Base  # 既存の Base クラスを継承
+from app.models.base import Base  # 既存の Base クラスを継承
 
 class LineToken(Base):
     """
