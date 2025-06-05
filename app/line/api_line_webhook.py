@@ -4,10 +4,6 @@ from sqlalchemy.orm import Session
 from app.dependencies.db import get_db
 from app.line import model_line_user
 from datetime import datetime
-import os
-import hmac
-import hashlib
-import base64
 
 router = APIRouter()
 
