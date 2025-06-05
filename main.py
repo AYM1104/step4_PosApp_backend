@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from app.api import product
 from app.api import transactions
-from app.line import api_line_webhook
+from app.line import api_line_webhook, api_line_qr
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -16,20 +16,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-import logging
-import os
+# import logging
+# import os
 
-logger = logging.getLogger("uvicorn")
+# logger = logging.getLogger("uvicorn")
 
-@app.get("/debug/access-token")
-def check_access_token():
-    token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
-    if token:
-        logger.info("✅ LINE_CHANNEL_ACCESS_TOKEN: 設定されています（長さ: %d）", len(token))
-        return {"status": "ok", "length": len(token)}
-    else:
-        logger.warning("❌ LINE_CHANNEL_ACCESS_TOKEN: 未設定です")
-        return {"status": "missing"}
+# @app.get("/debug/access-token")
+# def check_access_token():
+#     token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
+#     if token:
+#         logger.info("✅ LINE_CHANNEL_ACCESS_TOKEN: 設定されています（長さ: %d）", len(token))
+#         return {"status": "ok", "length": len(token)}
+#     else:
+#         logger.warning("❌ LINE_CHANNEL_ACCESS_TOKEN: 未設定です")
+#         return {"status": "missing"}
 
 
 
@@ -38,6 +38,7 @@ def check_access_token():
 app.include_router(product.router)
 app.include_router(transactions.router)
 app.include_router(api_line_webhook.router)
+app.include_router(api_line_qr.router)
 
 
 
