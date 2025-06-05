@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.dependencies.db import get_db
-from app.models.line_user import LineUser
+from app.line import model_line_user
 from datetime import datetime
 import os
 import hmac
@@ -13,16 +13,20 @@ router = APIRouter()
 
 # LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")  # 必須：.env や GitHub Secretsで定義
 
+""" DBにLINEUIDを登録する関数 """
 def register_line_user(user_id: str, db: Session):
-    """LINEユーザーをDBに登録（重複は無視）"""
-    existing = db.query(LineUser).filter(LineUser.line_uid == user_id).first()
+    # 重複を確認
+    existing = db.query(model_line_user).filter(model_line_user.line_uid == user_id).first()
     if existing:
         return
-    new_user = LineUser(line_uid=user_id, created_at=datetime.utcnow())
+    # 重複がなければ新規登録
+    new_user = model_line_user(line_uid=user_id, created_at=datetime.utcnow())
     db.add(new_user)
     db.commit()
 
-# LINEの友達追加イベントを受け取り、ユーザー登録する
+
+
+""" LINEの友達追加イベントを受け取り、DBにユーザーを登録するエンドポイント """
 @router.post("/line/webhook")
 async def line_webhook(request: Request, db: Session = Depends(get_db)):
     body = await request.body()
@@ -42,37 +46,3 @@ async def line_webhook(request: Request, db: Session = Depends(get_db)):
             register_line_user(user_id, db)
 
     return JSONResponse(content={"status": "ok"})
-
-
-
-# ーーーーー仮で実装
-# import requests
-
-# LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
-
-# @router.post("/line/send-receipt")
-# def send_receipt_to_user(user_id: str, db: Session = Depends(get_db)):
-#     # 仮の買い物履歴
-#     message = {
-#         "type": "text",
-#         "text": "🧾 ご購入ありがとうございます！\n\n- ペン × 2本\n- ノート × 1冊\n\n合計: ¥880（税込）"
-#     }
-
-#     # LINEに送信
-#     # headers = {
-#     #     "Content-Type": "application/json",
-#     #     "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
-#     # }
-
-#     body = {
-#         "to": user_id,
-#         "messages": [message]
-#     }
-
-#     res = requests.post("https://api.line.me/v2/bot/message/push", json=body, headers=headers)
-
-#     if res.status_code != 200:
-#         print("❌ LINE送信失敗:", res.text)
-#         raise HTTPException(status_code=500, detail="LINE送信に失敗しました")
-
-#     return {"status": "sent"}
