@@ -9,6 +9,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.models.base import Base  # 既存の Base クラスを継承
+from app.line.model_line_token import LineToken
 
 class LineUser(Base):
     """
@@ -22,4 +23,4 @@ class LineUser(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # 関連するトークン（1対多の関係）
-    tokens = relationship("LineToken", back_populates="line_user")
+    tokens = relationship(LineToken, back_populates="line_user")
