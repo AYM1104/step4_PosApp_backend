@@ -31,9 +31,13 @@ class TransactionItemResponse(BaseModel):
 class TransactionResponse(BaseModel):
     id: int
     created_at: datetime
+    register_user_code: str     
+    store_code: str             
+    pos_id: str
     total_excluding_tax: int 
     total_tax: int
     total_amount: int
+    total_items: int
     items: List[TransactionItemResponse]
 
     class Config:

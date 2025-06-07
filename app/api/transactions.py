@@ -25,6 +25,9 @@ def create_transaction(transaction_data: TransactionCreate, db: Session = Depend
 
     # トランザクション（親）を作成
     transaction = Transaction(
+        register_user_code=transaction_data.register_user_code or "9999999999", 
+        store_code="30", 
+        pos_id="90",  
         total_excluding_tax=total_excluding_tax,
         total_tax=total_tax,
         total_amount=total_amount,
