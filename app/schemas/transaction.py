@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 
 
@@ -12,6 +12,7 @@ class TransactionItemCreate(BaseModel):
 
 # 入力用スキーマ（取引全体）
 class TransactionCreate(BaseModel):
+    register_user_code: Optional[str] = None
     items: List[TransactionItemCreate]
     
 # 出力用スキーマ（1つの商品）
@@ -30,7 +31,7 @@ class TransactionItemResponse(BaseModel):
 # 出力用スキーマ（取引全体）
 class TransactionResponse(BaseModel):
     id: int
-    created_at: datetime
+    transaction_time: datetime
     register_user_code: str     
     store_code: str             
     pos_id: str

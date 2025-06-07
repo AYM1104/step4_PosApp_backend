@@ -32,7 +32,7 @@ def create_transaction(transaction_data: TransactionCreate, db: Session = Depend
         total_tax=total_tax,
         total_amount=total_amount,
         total_items=total_items,
-        created_at=datetime.now()
+        transaction_time=datetime.now()
     )
     db.add(transaction)
     db.flush()  # transaction.id を確定させるため
@@ -49,8 +49,9 @@ def create_transaction(transaction_data: TransactionCreate, db: Session = Depend
         db.add(db_item)
 
     db.commit()
-    db.refresh(transaction)
-    return transaction
+    # ✅ items を含めて返す
+    transaction_with_items = db.query(Transaction).options(joinedload(Transaction.items)).get(transaction.id)
+    return transaction_with_items
 
 # 全ての取引とその商品明細を一覧で取得
 @router.get("/transactions", response_model=list[TransactionResponse])

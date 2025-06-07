@@ -15,6 +15,7 @@ class Transaction(Base):
     total_amount = Column(Integer, nullable=False) 
     total_items = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=datetime.now)
+    transaction_time = Column(DateTime, default=datetime.now, nullable=False)
 
     # Transaction → TransactionItem の1対多リレーション
     items = relationship("TransactionItem", back_populates="transaction")
