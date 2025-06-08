@@ -27,11 +27,24 @@ async def send_purchase_to_line(payload: LineSendPayload):
     user_id = payload.user_id
     cart_items = payload.cart_items
 
+    if not user_id or not cart_items:
+        return JSONResponse(status_code=400, content={"error": "Missing user_id or cart_items"})
+
+    # 🧾 各商品を1行ずつ整形
     lines = [
-        f"{item.name} × {item.quantity}：¥{item.price * item.quantity}"
+        f"{item['name']} × {item['quantity']}：¥{item['price'] * item['quantity']}"
         for item in cart_items
     ]
-    message = "🧾 ご購入ありがとうございます！\n" + "\n".join(lines)
+
+    # ✅ 合計金額を計算
+    total = sum(item['price'] * item['quantity'] for item in cart_items)
+
+    # ✨ メッセージに合計を追加
+    message = (
+        "🧾 ご購入ありがとうございます！\n"
+        + "\n".join(lines)
+        + f"\n\n🧮 合計：¥{total}"
+    )
 
     try:
         await push_text_message(user_id, message)
