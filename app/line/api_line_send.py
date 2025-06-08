@@ -30,14 +30,14 @@ async def send_purchase_to_line(payload: LineSendPayload):
     if not user_id or not cart_items:
         return JSONResponse(status_code=400, content={"error": "Missing user_id or cart_items"})
 
-    # 🧾 各商品を1行ずつ整形
+    # 🧾 各商品を1行ずつ整形（ドット記法に修正）
     lines = [
-        f"{item['name']} × {item['quantity']}：¥{item['price'] * item['quantity']}"
+        f"{item.name} × {item.quantity}：¥{item.price * item.quantity}"
         for item in cart_items
     ]
 
     # ✅ 合計金額を計算
-    total = sum(item['price'] * item['quantity'] for item in cart_items)
+    total = sum(item.price * item.quantity for item in cart_items)
 
     # ✨ メッセージに合計を追加
     message = (
