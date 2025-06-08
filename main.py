@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from app.api import product
 from app.api import transactions
-from app.line import api_line_webhook, api_line_qr
+from app.line import api_line_webhook, api_line_qr, api_line_send
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 load_dotenv() 
@@ -41,5 +41,6 @@ app.include_router(product.router)
 app.include_router(transactions.router)
 app.include_router(api_line_webhook.router)
 app.include_router(api_line_qr.router)
+app.include_router(api_line_send.router)
 
 
