@@ -8,12 +8,16 @@ from datetime import datetime
 import qrcode
 from io import BytesIO
 import base64
-from app.line.send_line_message import reply_image_message
+from app.line.send_line_message import reply_text_message
 from app.line.model_line_user import LineUser
 
-router = APIRouter()
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-# LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")  # 必須：.env や GitHub Secretsで定義
+FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL")
+
+router = APIRouter()
 
 """ DBにLINEUIDを登録する関数 """
 def register_line_user(user_id: str, db: Session):
@@ -59,24 +63,11 @@ async def line_webhook(request: Request, db: Session = Depends(get_db)):
                 if not user:
                     register_line_user(user_id, db)
 
-                # ✅ QRコード生成
-                qr = qrcode.make(user_id)
-                buf = BytesIO()
-                qr.save(buf, format="PNG")
-                buf.seek(0)
-
-                # ✅ Base64エンコードして Data URI に変換
-                base64_image = base64.b64encode(buf.getvalue()).decode("utf-8")
-                # data_url = f"data:image/png;base64,{base64_image}"
-
-                # ✅ LINEに画像として返信（Data URI は使えないので注意！）
-                # → 必ず public URL or S3 にアップロードする必要あり
-                # → ここでは fallback: 画像を「LINE側で表示できるURL」として仮に扱う
-                image_hosting_url = f"https://1cc6-2400-2412-be0-b00-54df-ab0c-4ba-5e3e.ngrok-free.app/line/qr/{user_id}"
-
-                await reply_image_message(
+                # ✅ QRコード表示ページのURLを生成して送信
+                qr_page_url = f"{FRONTEND_BASE_URL}/line/qr?user_id={user_id}"
+                await reply_text_message(
                     reply_token=event["replyToken"],
-                    image_url=image_hosting_url  # ← StreamingResponseでこのURLから取得できるようにしておく
+                    text=f"こちらがあなた専用のQRコードです！\n{qr_page_url}"
                 )
 
     return JSONResponse(content={"status": "ok"})
