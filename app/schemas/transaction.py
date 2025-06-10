@@ -23,6 +23,8 @@ class TransactionItemResponse(BaseModel):
     name: str
     price: int
     quantity: int
+    product_code: Optional[str] = None
+    tax_cd: Optional[str] = None
 
     class Config:
         orm_mode = True
