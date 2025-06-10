@@ -37,19 +37,26 @@ def create_transaction(transaction_data: TransactionCreate, db: Session = Depend
         total_tax=total_tax,
         total_amount=total_amount,
         total_items=total_items,
-        transaction_time=datetime.now()
+        transaction_time=transaction_time
     )
     db.add(transaction)
     db.flush()  # transaction.id を確定させるため
 
     # 子アイテムを追加
     for item in transaction_data.items:
+        # ✅ 商品マスタから prd_id, tax_cd を取得
+        product = db.query(Product).filter(Product.jan_code == item.jan_code).first()
+        if not product:
+            raise HTTPException(status_code=404, detail=f"JANコード {item.jan_code} の商品が見つかりません")
+        
         db_item = TransactionItem(
             transaction_id=transaction.id,
             jan_code=item.jan_code,
             name=item.name,
             price=item.price,
-            quantity=item.quantity
+            quantity=item.quantity,
+            product_code=product.product_code, 
+            tax_cd=product.tax_cd
         )
         db.add(db_item)
 
