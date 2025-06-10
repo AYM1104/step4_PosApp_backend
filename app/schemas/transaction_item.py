@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 # 入力用スキーマ（会計時に送る各アイテム）
 class TransactionItemCreate(BaseModel):
@@ -11,6 +12,8 @@ class TransactionItemCreate(BaseModel):
 class TransactionItemResponse(TransactionItemCreate):
     id: int
     transaction_id: int
+    product_code: Optional[str]  # ✅ 商品一意コード
+    tax_cd: Optional[str]        # ✅ 消費税区分
 
     class Config:
         orm_mode = True

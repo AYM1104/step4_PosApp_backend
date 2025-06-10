@@ -4,7 +4,7 @@ from typing import Optional
 
 # 入力用スキーマ
 class ProductCreate(BaseModel):
-    code: str
+    product_code: str
     jan_code: str
     name: str
     price: int
@@ -15,7 +15,7 @@ class ProductCreate(BaseModel):
 # 出力用スキーマ
 class ProductResponse(BaseModel):
     id: int
-    code: str
+    product_code: str
     jan_code: str
     name: str
     price: int

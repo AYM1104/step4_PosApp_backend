@@ -5,11 +5,14 @@ from app.schemas.transaction import TransactionCreate, TransactionResponse
 from app.models.transaction import Transaction
 from app.models.transaction_item import TransactionItem
 from sqlalchemy.orm import joinedload
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from app.models.product import Product
 
 router = APIRouter()
 
 TAX_RATE = 0.1  # 消費税率（10%）
+JST = timezone(timedelta(hours=9))  # 日本時間のタイムゾーン定義
+
 
 # transactions テーブルに1件の「取引」を作成し、transaction_items テーブルにその取引に紐づく「商品明細」を複数登録する
 @router.post("/transactions", response_model=TransactionResponse)
@@ -22,6 +25,8 @@ def create_transaction(transaction_data: TransactionCreate, db: Session = Depend
     total_amount = total_excluding_tax + total_tax
     # 商品点数（合計数量）
     total_items = sum(item.quantity for item in transaction_data.items)
+    # 日本時間で登録
+    transaction_time=datetime.now(JST)  
 
     # トランザクション（親）を作成
     transaction = Transaction(
