@@ -56,7 +56,7 @@ def create_transaction(transaction_data: TransactionCreate, db: Session = Depend
             price=item.price,
             quantity=item.quantity,
             product_code=product.product_code, 
-            tax_cd=product.tax_cd
+            tax_cd="10"
         )
         db.add(db_item)
 
