@@ -64,6 +64,9 @@ def create_transaction(transaction_data: TransactionCreate, db: Session = Depend
     db.commit()
     # ✅ items を含めて返す
     transaction_with_items = db.query(Transaction).options(joinedload(Transaction.items)).get(transaction.id)
+    # ✅ 各明細アイテムの中身を確認するログ（ここに入れる！）
+    for item in transaction_with_items.items:
+        print("🧾 item:", vars(item))
     return transaction_with_items
 
 # 全ての取引とその商品明細を一覧で取得
