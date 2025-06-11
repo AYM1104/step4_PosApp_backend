@@ -14,6 +14,7 @@ class TransactionItemResponse(TransactionItemCreate):
     transaction_id: int
     product_code: Optional[str]  # ✅ 商品一意コード
     tax_cd: Optional[str]        # ✅ 消費税区分
+    product_id: Optional[int]
 
     class Config:
         orm_mode = True
